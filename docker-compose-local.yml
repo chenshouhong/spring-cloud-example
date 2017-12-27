@@ -1,0 +1,173 @@
+version: '2.1'
+services:
+
+  eureka:
+    image: erdaoya/cloud-server-discovery
+    ports:
+      - "9001:9001"
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_HOST: discovery
+      SERVICE_PORT: 9001
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9001/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  config:
+    image: erdaoya/cloud-server-config
+    ports:
+      - "9000:9000"
+    links:
+      - eureka:discovery
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_PORT: 9000
+      REGISTRY_URL: http://discovery:9001/eureka
+    depends_on:
+      eureka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+
+
+  zipkin:
+    image: erdaoya/cloud-zipkin-ui
+    ports:
+      - "9012:9012"
+    links:
+      - config:config
+      - eureka:discovery
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_PORT: 9012
+      REGISTRY_URL: http://discovery:9001/eureka
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+
+  user:
+    image: erdaoya/cloud-service-user
+    ports:
+      - "9002:9002"
+    links:
+      - config:config
+      - eureka:discovery
+      - zipkin:zipkin
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_PORT: 9002
+      REGISTRY_URL: http://discovery:9001/eureka
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+  user2:
+    image: erdaoya/cloud-service-user
+    ports:
+      - "9102:9102"
+    links:
+      - config:config
+      - eureka:discovery
+      - zipkin:zipkin
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_PORT: 9002
+      REGISTRY_URL: http://discovery:9001/eureka
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+
+  trade:
+    image: erdaoya/cloud-service-trade
+    ports:
+      - "9007:9007"
+    links:
+      - config:config
+      - eureka:discovery
+      - zipkin:zipkin
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_PORT: 9007
+      REGISTRY_URL: http://discovery:9001/eureka
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+
+  gateway:
+    image: erdaoya/cloud-api-gateway
+    ports:
+      - "9006:9006"
+    links:
+      - eureka:discovery
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_PORT: 9006
+      REGISTRY_URL: http://discovery:9001/eureka
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy
+
+  turbine:
+    image: erdaoya/cloud-turbine-dashboard
+    ports:
+      - "9010:9010"
+    links:
+      - comx:comx
+      - user:user
+      - trade:trade
+      - eureka:discovery
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_PORT: 9010
+      REGISTRY_URL: http://discovery:9001/eureka
+    depends_on:
+      - eureka
+      - config
+
+  admin:
+    image: erdaoya/cloud-admin-ui
+    ports:
+      - "9003:9003"
+    links:
+      - turbine:turbine
+      - eureka:discovery
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_PORT: 9003
+      REGISTRY_URL: http://discovery:9001/eureka
+      TURBINE_URL: http://turbine:9010/turbine.stream
+    depends_on:
+      - eureka
+
+  comx:
+    image: erdaoya/cloud-service-comx
+    ports:
+      - "9019:9019"
+    links:
+      - eureka:discovery
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_PORT: 9019
+      REGISTRY_URL: http://discovery:9001/eureka
+#    volumes:
+#        - "/www:/www"
+    depends_on:
+      eureka:
+        condition: service_healthy
+      config:
+        condition: service_healthy

@@ -2,7 +2,9 @@ package com.erdaoya.springcloud.gateway.config;
 
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.*;
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  *  fix: ribbon:ServerListRefreshInterval ignored
@@ -17,5 +19,6 @@ public class CustomLoadBalancer {
                                             IRule rule, IPing ping) {
         return new ZoneAwareLoadBalancer<>(config, rule, ping, serverList,
                 serverListFilter, new PollingServerListUpdater(config));
+
     }
 }

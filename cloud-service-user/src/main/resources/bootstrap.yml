@@ -9,34 +9,27 @@ spring:
       discovery:
         enabled: true
         serviceId: cloud-server-config
-
 # change those config in prod ?
 eureka:
   instance:
     lease-expiration-duration-in-seconds: 30
     lease-renewal-interval-in-seconds: 10
-
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
 ---
 spring:
   profiles: dev
-
 server:
   port: 9002
-
-        
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://10.69.42.86:9001/eureka/
+      defaultZone: http://localhost:9001/eureka/
 ---
 spring:
   profiles: docker
-
 server:
   port: ${SERVICE_PORT}
-
 eureka:
   instance:
     prefer-ip-address: true

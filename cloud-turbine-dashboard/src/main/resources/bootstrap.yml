@@ -4,7 +4,12 @@ spring:
   profiles.active: dev
 server:
   port : 9010
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: '${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}'
 
+management.security.enabled: false
 ---
 
 spring:
@@ -16,7 +21,7 @@ eureka:
       defaultZone: http://localhost:9001/eureka/
 
 turbine:
-  appConfig: cloud-service-client, cloud-api-gateway
+  appConfig: cloud-service-comx, cloud-api-gateway
   aggregator:
     clusterConfig: default
   clusterNameExpression: new String("default")
@@ -30,13 +35,11 @@ server:
   port : ${SERVICE_PORT}
 
 eureka:
-  instance:
-    prefer-ip-address: true
   client:
     service-url:
       defaultZone: ${REGISTRY_URL}
 turbine:
-  appConfig: cloud-service-client, cloud-api-gateway
+  appConfig: cloud-service-comx, cloud-api-gateway
   aggregator:
     clusterConfig: default
   clusterNameExpression: new String("default")

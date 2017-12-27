@@ -1,6 +1,7 @@
 spring:
   application:
     name: cloud-api-gateway
+  profiles.active: dev
   cloud:
       config:
         failFast: true
@@ -8,6 +9,7 @@ spring:
           enabled: true
           serviceId: cloud-server-config
       inetutils:
+        #忽略网卡
         ignoredInterfaces:
           - docker0
           - veth.*
@@ -19,48 +21,30 @@ spring:
             contentType: application/json
 server:
   port: 9006
-
-eureka:
-  client:
-    registry-fetch-interval-seconds: 4
-    serviceUrl:
-      defaultZone: http://localhost:9001/eureka/
-
-
 logging:
   level:
     com.netflix.loadbalancer: INFO
     com.netflix.discovery: INFO
     org.springframework.security: INFO
-
 # bug in c
 ribbon:
   ServerListRefreshInterval: 2000
-
-
-
 zuul:
   routes:
     users:
       path: /user/**
       serviceId: cloud-service-user
       stripPrefix: false
-
-    client:
-      path: /client/**
-      serviceId: cloud-service-client
-      stripPrefix: false
-
     ext:
       path: /ext/**
       serviceId: cloud-service-comx
       stripPrefix: false
-
     trade:
       path: /trade/**
       serviceId: cloud-service-trade
       stripPrefix: false
-
+  # 允许重试
+  retryable: true
 hystrix:
   command:
     users:
@@ -72,16 +56,19 @@ hystrix:
   threadpool:
     default:
       coreSize: 50
-
-
 ---
-
+spring:
+  profiles: dev
+eureka:
+  client:
+    registry-fetch-interval-seconds: 4
+    serviceUrl:
+      defaultZone: http://localhost:9001/eureka/
+---
 spring:
   profiles: docker
-
 server:
   port : ${SERVICE_PORT}
-
 eureka:
   instance:
     prefer-ip-address: true

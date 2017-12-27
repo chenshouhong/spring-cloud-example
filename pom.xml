@@ -21,7 +21,6 @@
         <module>cloud-turbine-dashboard</module>
         <module>cloud-zipkin-ui</module>
 
-        <module>cloud-service-client</module>
         <module>cloud-service-comx</module>
         <module>cloud-service-trade</module>
         <module>cloud-service-user</module>
@@ -201,6 +200,7 @@
                     <groupId>com.spotify</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
                     <version>${docker.plugin.version}</version>
+
                     <executions>
                         <execution>
                             <id>build-image</id>
@@ -248,6 +248,9 @@
                                 <filtering>true</filtering>
                             </resource>
                         </resources>
+                        <!-- 解决Connect to localhost:2375的问题的其中一种方式，注意要跟docker-machine env相一致 -->
+                        <dockerHost>https://192.168.99.100:2376</dockerHost>
+                        <dockerCertPath>C:\Users\luzhiwei\.docker\machine\machines\default</dockerCertPath>
                     </configuration>
                 </plugin>
             </plugins>

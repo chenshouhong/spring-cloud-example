@@ -1,37 +1,41 @@
 spring:
   application:
     name: amdin-ui
-  boot:
-      admin:
-        turbine:
-          url: http://localhost:9010/turbine.stream
-          clusters: default
+  profiles:
+    active: dev
 server:
   port : 9003
-        
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: '${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}'
+
+management.security.enabled: false
+
+---
+spring:
+  profiles: dev
+  boot:
+    admin:
+      turbine:
+        url: http://localhost:9010/turbine.stream
+        clusters: default
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:9001/eureka/
 
-
-
 ---
-
 spring:
   profiles: docker
   boot:
-      admin:
-        turbine:
-          url: ${TURBINE_URL}
-          clusters: default
-
+    admin:
+      turbine:
+        url: ${TURBINE_URL}
+        clusters: default
 server:
   port : ${SERVICE_PORT}
-
 eureka:
-  instance:
-    prefer-ip-address: true
   client:
     service-url:
       defaultZone: ${REGISTRY_URL}

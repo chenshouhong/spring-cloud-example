@@ -3,6 +3,7 @@ package com.erdaoya.springcloud.gateway;
 import com.erdaoya.springcloud.gateway.config.CustomLoadBalancer;
 import com.erdaoya.springcloud.gateway.filter.AccessFilter;
 import com.erdaoya.springcloud.gateway.filter.ResponseFilter;
+import com.netflix.loadbalancer.BestAvailableRule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;

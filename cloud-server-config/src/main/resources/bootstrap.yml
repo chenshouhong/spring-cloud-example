@@ -6,9 +6,10 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/ThoreauZZ/spring-cloud-example.git
-          searchPaths: config-repo
+          uri: https://github.com/markWord/config-repo
+          searchPaths: spring-cloud-example
           force-pull: true
+
         bootstrap: true
     stream:
       bindings:
@@ -17,27 +18,38 @@ spring:
           contentType: application/json
 server:
   port: 9000
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: '${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}'
 
 ---
 spring:
   profiles: dev
-
+  cloud:
+    config:
+      server:
+        git:
+          basedir: D:/config-repo
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:9001/eureka/
-
+  instance:
+      prefer-ip-address: false
 
 ---
 spring:
   profiles: docker
-
+  cloud:
+      config:
+        server:
+          git:
+            basedir: /data/config-repo
 server:
   port: ${SERVICE_PORT}
 
 eureka:
-  instance:
-    prefer-ip-address: true
   client:
     service-url:
       defaultZone: ${REGISTRY_URL}

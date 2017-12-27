@@ -9,31 +9,32 @@ spring:
       discovery:
         enabled: true
         serviceId: cloud-server-config
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: '${spring.cloud.client.ipAddress}:${spring.application.name}:${server.port}'
 
+management.security.enabled: false
 ---
-
 spring:
   profiles: dev
   datasource:
     schema: classpath:/mysql.sql
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.99.100:3306/zipkin
+    url: jdbc:mysql://192.168.9.224:3306/zipkin_spring_cloud
     username: root
-    password: 1234
+    password: ycf_test
     initialize: true
     continueOnError: true
   sleuth:
     enabled: false
-
 server:
   port: 9012
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:9001/eureka/
-
-
 zipkin:
   storage:
     type: mysql
@@ -42,17 +43,12 @@ zipkin:
 
 spring:
   profiles: docker
-
 server:
   port: ${SERVICE_PORT}
-
 eureka:
-  instance:
-    prefer-ip-address: true
   client:
     service-url:
       defaultZone: ${REGISTRY_URL}
-
 zipkin:
   storage:
     type: mysql

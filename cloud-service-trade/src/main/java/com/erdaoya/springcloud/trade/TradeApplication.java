@@ -3,6 +3,7 @@ package com.erdaoya.springcloud.trade;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @ComponentScan("com.erdaoya.springcloud")
+@EnableFeignClients
 @EnableDiscoveryClient
 public class TradeApplication {
     public static void main(String[] args) {

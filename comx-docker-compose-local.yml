@@ -1,0 +1,12 @@
+version: '2.1'
+services:
+  comx:
+    image: erdaoya/cloud-service-comx
+    ports:
+      - "9019:9019"
+    environment:
+      JAVA_OPTS: -Xmx128m
+      SERVICE_PORT: 9019
+      REGISTRY_URL: http://discovery:9001/eureka
+#    volumes:
+#        - "/www:/www"

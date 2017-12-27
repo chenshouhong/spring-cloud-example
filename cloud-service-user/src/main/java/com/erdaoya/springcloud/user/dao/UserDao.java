@@ -1,6 +1,6 @@
 package com.erdaoya.springcloud.user.dao;
 
-import com.erdaoya.springcloud.user.entity.User;
+import com.erdaoya.springcloud.user.api.entity.User;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

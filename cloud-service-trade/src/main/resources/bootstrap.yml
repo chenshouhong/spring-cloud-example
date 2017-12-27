@@ -16,16 +16,12 @@ server:
 ---
 spring:
   profiles: dev
-
-
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:9001/eureka/
 
-
 ---
-
 spring:
   profiles: docker
 

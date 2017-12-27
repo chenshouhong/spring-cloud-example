@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<assembly>
+    <id>mstone-release</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}/src/main/assembly/bin</directory>
+            <outputDirectory>/bin</outputDirectory>
+            <fileMode>0755</fileMode> <!--文件执行权限-->
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/target</directory>
+            <outputDirectory>lib</outputDirectory>
+            <includes>
+                <include>*.jar</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+
+    <files>
+        <file>
+        <source>${project.basedir}/target/classes/logback-spring.xml</source>
+        <outputDirectory>/config</outputDirectory>
+        <filtered>false</filtered>
+        </file>
+        <file>
+            <source>${project.basedir}/target/classes/application.yml</source>
+            <outputDirectory>/config</outputDirectory>
+            <filtered>false</filtered>
+        </file>
+    </files>
+
+<!--    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <useProjectArtifact>true</useProjectArtifact>
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+        </dependencySet>
+
+    </dependencySets>-->
+
+</assembly>
